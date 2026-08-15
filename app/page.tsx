@@ -1,65 +1,131 @@
-import Image from "next/image";
+import { BentoHero } from "@/components/BentoHero";
+import { Marquee } from "@/components/Marquee";
+import { PhotoFrame } from "@/components/PhotoFrame";
+import { CtaBand, ProcessSteps } from "@/components/sections";
+import { ServiceGrid } from "@/components/ServiceCard";
+import {
+  Button,
+  Doodle,
+  Eyebrow,
+  RichHeading,
+  Section,
+  SectionHeader,
+  TrustChip,
+} from "@/components/ui";
+import {
+  cta,
+  feature,
+  intro,
+  marquee,
+  process,
+  processHeader,
+  servicesHeader,
+} from "@/content/home";
+import { services } from "@/content/services";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+    <>
+      <BentoHero />
+
+      <Marquee items={marquee} />
+
+      {/* What we believe */}
+      <Section className="bg-cream">
+        <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-20">
+          <div>
+            <Eyebrow>{intro.label}</Eyebrow>
+            <RichHeading
+              text={intro.headline}
+              className="mt-4 text-section text-ink"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          </div>
+          <div>
+            <p className="u-prose text-ink/80">{intro.body}</p>
+            <p className="u-prose mt-5 text-ink/80">{intro.body2}</p>
+            <div className="mt-9 flex flex-wrap gap-4">
+              <Button href={intro.primary.href}>{intro.primary.label}</Button>
+              <Button href={intro.secondary.href} variant="secondary">
+                {intro.secondary.label}
+              </Button>
+            </div>
+          </div>
         </div>
-      </main>
-    </div>
+      </Section>
+
+      {/* Six services */}
+      <Section className="bg-cream-deep">
+        <SectionHeader
+          label={servicesHeader.label}
+          headline={servicesHeader.headline}
+          align="center"
+          className="mx-auto max-w-2xl"
+        />
+        <ServiceGrid services={services} className="mt-14" />
+        <div className="mt-12 text-center">
+          <Button href="/services" variant="secondary">
+            See all services
+          </Button>
+        </div>
+      </Section>
+
+      {/* Why families choose us */}
+      <Section className="bg-cream">
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+          <div className="relative">
+            <PhotoFrame
+              src={feature.image.src}
+              alt={feature.image.alt}
+              color="sky"
+              className="h-[26rem] w-full sm:h-[32rem]"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+            />
+            <Doodle
+              name="infinity"
+              color="text-tomato"
+              className="absolute -right-4 -top-5 h-16 w-16"
+            />
+          </div>
+          <div>
+            <Eyebrow>{feature.label}</Eyebrow>
+            <RichHeading
+              text={feature.headline}
+              className="mt-4 text-section text-ink"
+            />
+            <p className="u-prose mt-6 text-ink/80">{feature.body}</p>
+            <p className="u-prose mt-5 text-ink/80">{feature.body2}</p>
+            <TrustChip className="mt-7" />
+            <div className="mt-9 flex flex-wrap gap-4">
+              <Button href={feature.primary.href}>
+                {feature.primary.label}
+              </Button>
+              <Button href={feature.secondary.href} variant="secondary">
+                {feature.secondary.label}
+              </Button>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      {/* Getting started */}
+      <Section className="bg-cream-deep">
+        <SectionHeader
+          label={processHeader.label}
+          headline={processHeader.headline}
+          align="center"
+          className="mx-auto max-w-2xl"
+        />
+        <div className="mt-14">
+          <ProcessSteps steps={process} />
+        </div>
+      </Section>
+
+      <CtaBand
+        headline={cta.headline}
+        body={cta.body}
+        primary={cta.primary}
+        secondary={cta.secondary}
+      />
+    </>
   );
 }

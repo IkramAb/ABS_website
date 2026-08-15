@@ -1,26 +1,203 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Palette. Rule: ink is the text color on every colored surface.
+     White is used only on tomato. Ratios vs ink are noted per token.
+
+     Four tokens are taken straight from the logo, so the mark and the page
+     share one set of hues. Their names predate the logo and no longer
+     describe the value — the true hue is noted on each. sun and sky are the
+     two bridge colors: the logo has no yellow, and dropping either would
+     collapse the six-color tile sequence the content files rely on. */
+  --color-cream: #fdf6ec; /* 12.7:1 — page base */
+  --color-cream-deep: #f7ead6; /* secondary warm surface */
+  --color-ink: #1f2a54; /* deep indigo-navy — all text */
+  --color-ink-soft: #5a6485; /* muted body text, 4.9:1 on cream */
+  --color-sun: #f3be43; /* yellow — 8.1:1 */
+  --color-sky: #7fc7e8; /* light blue — 7.4:1 */
+  --color-coral: #fa9e4b; /* logo amber — 6.6:1 */
+  --color-leaf: #7fc3b5; /* logo teal — 6.8:1 */
+  --color-lilac: #82a0e1; /* logo periwinkle — 5.3:1, the palette floor */
+  --color-rose: #f9b0b7; /* logo pink — 7.9:1 */
+  --color-tomato: #c6412a; /* 4.97:1 on white — CTA only */
+
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+
+  /* Fluid type scale. The hero runs ~5.4× body at desktop — the size contrast
+     the design references trade on, which fixed breakpoint steps never gave. */
+  --text-hero: clamp(3rem, 7vw, 5.75rem); /* 48 → 92px */
+  --text-section: clamp(2.25rem, 4.5vw, 4rem); /* 36 → 64px */
+  --text-subsection: clamp(1.75rem, 3vw, 2.5rem); /* 28 → 40px */
+  --text-card: clamp(1.35rem, 1.8vw, 1.75rem); /* 22 → 28px */
+
+  /* Page shell. Wide enough that a normal laptop or desktop fills edge to
+     edge; the cap only engages on very large monitors, where an uncapped
+     grid would stretch the tiles into letterboxes. */
+  --container-shell: 120rem; /* 1920px */
+
+  --radius-tile: 28px;
+  --radius-chip: 999px;
+
+  --shadow-tile: 0 10px 30px -12px rgb(31 42 84 / 0.22);
+  --shadow-tile-lg: 0 22px 50px -18px rgb(31 42 84 / 0.28);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  h1,
+  h2,
+  h3,
+  h4 {
+    /* Bricolage is set at 600 — heavy enough to carry the display role on its
+       own, light enough that the 800 emphasis still opens a visible gap. The
+       tight tracking and sub-1 leading are what stop a grotesque this size
+       from reading as generic; both come from the /type specimen. */
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 0.98;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-ink);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  ::selection {
+    background: var(--color-sun);
+    color: var(--color-ink);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .u-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .u-prose {
+    max-width: 62ch;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+  }
+
+  /* Hero trust tiles.
+     The tile's width swings from 335px (full-width on mobile) to 164px (a
+     narrow column at the md breakpoint) to 292px on wide desktops — and
+     "Individualized" is a 14-character word. Sizing this against the viewport
+     overflows at exactly 768px, where the column is narrowest but a viewport
+     clamp is still near its floor. So the type is sized against the *tile*
+     instead: 1cqw is one percent of the tile's own width. */
+  .u-tile {
+    container-type: inline-size;
+  }
+
+  .u-tile-text {
+    font-size: clamp(1rem, 13cqw, 2rem);
+    line-height: 1.1;
+  }
+
+  /* The single page shell: centers, caps on very wide screens, and owns the
+     gutter. Sections keep their own vertical rhythm and any full-bleed
+     background; only the horizontal measure lives here, so the gutter is
+     defined once instead of on every section wrapper. */
+  .u-shell {
+    margin-inline: auto;
+    width: 100%;
+    max-width: var(--container-shell);
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 40rem) {
+    .u-shell {
+      padding-inline: 2rem;
+    }
+  }
+
+  @media (min-width: 80rem) {
+    .u-shell {
+      padding-inline: 3rem;
+    }
+  }
+
+}
+
+/* ---- Motion ---------------------------------------------------------
+   Three sources, and that is the whole list: a gentle rise on tiles, the
+   marquee, and the shader wash behind a service card.
+
+   All of it collapses under prefers-reduced-motion. Note the distinction the
+   shader draws: its *pattern* is always painted, on every card, but frozen —
+   a static texture is not motion. Only the hovered card animates, and under
+   reduced-motion none ever does.
+
+   That split is deliberate for this audience. Ambient background movement is
+   a common sensory trigger for the families this site is for, so motion is
+   something a visitor opts into by pointing at a card, never something the
+   page does at them. Do not "simplify" it into an always-animating
+   background. See components/CardShader.tsx. */
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.anim-rise {
+  opacity: 0;
+  animation: rise-in 0.6s cubic-bezier(0.22, 0.85, 0.3, 1) forwards;
+  animation-delay: var(--rise-delay, 0ms);
+}
+
+.anim-marquee {
+  animation: marquee-scroll 44s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-rise {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .anim-marquee {
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

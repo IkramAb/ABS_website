@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 64" width="120" height="64" fill="none">
+  <!--
+    The neurodiversity infinity, in full colour. This is the statement version:
+    used once, on /about, where the site talks about identity. The single-colour
+    line version lives in the Doodle vocabulary in components/ui.tsx.
+
+    PROVISIONAL — replace with the supplied artwork. Keep the viewBox ratio if
+    you can, or update the width/height where it's placed.
+
+    Colours are the site palette rather than a literal spectrum, so the mark
+    belongs to this brand instead of looking pasted in.
+  -->
+  <defs>
+    <linearGradient id="abs-infinity" x1="0" y1="0" x2="120" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f9b0b7"/>
+      <stop offset="0.28" stop-color="#fa9e4b"/>
+      <stop offset="0.52" stop-color="#f3be43"/>
+      <stop offset="0.74" stop-color="#7fc3b5"/>
+      <stop offset="1" stop-color="#82a0e1"/>
+    </linearGradient>
+  </defs>
+
+  <path
+    d="M60 32c8.4-14.6 15.7-21.8 25.2-21.8a21.8 21.8 0 0 1 0 43.6C75.7 53.8 68.4 46.6 60 32Zm0 0C51.6 17.4 44.3 10.2 34.8 10.2a21.8 21.8 0 0 0 0 43.6C44.3 53.8 51.6 46.6 60 32Z"
+    stroke="url(#abs-infinity)"
+    stroke-width="9"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>
